@@ -42,12 +42,14 @@ jobs:
 
   notify:
     runs-on: ubuntu-latest
-    needs: test  # Waits for the 'test' job to finish
-    if: always() # Run regardless of success/failure
+    needs: test
+    if: always()
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Send Slack Notification
         run: |
           STATUS="${{ needs.test.result }}"
           curl -X POST -H 'Content-type: application/json' \
           --data "{\"text\":\"Selenium Java test job finished with status: *$STATUS*\"}" \
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+          $SLACK_WEBHOOK_URL
