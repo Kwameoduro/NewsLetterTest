@@ -30,8 +30,15 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
 
-      - name: Run Tests with Maven
-        run: mvn clean test
+      - name: Run Tests with Maven and Save Logs
+        run: |
+          mvn clean test | tee test-output.log
+
+      - name: Upload Full Maven Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-full-logs
+          path: test-output.log
 
       - name: Upload Test Reports on Failure
         if: failure()
