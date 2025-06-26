@@ -47,7 +47,7 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      - name: Send Slack Notification
+      - name: Notify Slack Notification
         run: |
           STATUS="${{ needs.test.result }}"
           curl -X POST -H 'Content-type: application/json' \
