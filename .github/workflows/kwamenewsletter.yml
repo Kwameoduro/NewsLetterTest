@@ -44,43 +44,16 @@ jobs:
     name: Send Slack Notification
     runs-on: ubuntu-latest
     needs: test
-    if: always()  # Run even if tests fail
+    if: always()
 
     steps:
-      # Step 1: Send Slack Notification - FIXED: Proper secret checking
-      - name: Send Slack Notification
-        if: always()
+      - name: Post Slack Message
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ needs.test.result }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow
-          text: |
-          
-             Selenium Tests ${{ needs.test.result == 'success' && ' PASSED' || ' FAILED' }}
-            
-             Details:
-            • Repository: ${{ github.repository }}
-            • Author: ${{ github.actor }}
-            
-            🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          text: >
+            Selenium Java Tests *${{ needs.test.result == 'success' && 'PASSED' || 'FAILED' }}* 
+            in workflow _${{ github.workflow }}_ on branch `${{ github.ref_name }}`
+            👉 <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Details>
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      # Step 2: Show notification status (for debugging)
-      - name: Notification Status
-        if: always()
-        run: |
-          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
-            echo " Slack notification: Configured "
-            echo " Notifications sent to your #selenium-tests channel!"
-          else
-            echo " Slack notification: Not configured "
-            echo ""
-            echo " To enable Slack notifications:"
-            echo "1. Create a Slack channel (e.g., #selenium-tests)"
-            echo "2. Add Incoming Webhooks app to your channel"
-            echo "3. Copy the webhook URL"
-            echo "4. Add it as SLACK_WEBHOOK_URL secret in GitHub"
-            echo ""
-            echo "🔗 Guide: https://api.slack.com/messaging/webhooks"
-          fi
