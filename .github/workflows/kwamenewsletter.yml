@@ -55,8 +55,15 @@ jobs:
           status: ${{ needs.test.result }}
           fields: repo,message,commit,author,action,eventName,ref,workflow
           text: |
-             Selenium Tests ${{ needs.test.result == 'success' && ' PASSED' || ' FAILED' }}  
+          
+             Selenium Tests ${{ needs.test.result == 'success' && ' PASSED' || ' FAILED' }}
             🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+#
+#            Details:
+#            • Repository: ${{ github.repository }}
+#            • Author: ${{ github.actor }}
+#
+#            🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
@@ -65,7 +72,7 @@ jobs:
         if: always()
         run: |
           if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
-            echo " Slack notification: Configured ✅"
+            echo " Slack notification: Configured "
             echo " Notifications sent to your #selenium-tests channel!"
           else
             echo " Slack notification: Not configured "
