@@ -55,14 +55,7 @@ jobs:
           status: ${{ needs.test.result }}
           fields: repo,message,commit,author,action,eventName,ref,workflow
           text: |
-            🧪 Selenium Tests ${{ needs.test.result == 'success' && '✅ PASSED' || '❌ FAILED' }}
-            
-            📋 Details:
-            • Repository: ${{ github.repository }}
-            • Branch: ${{ github.ref_name }}
-            • Commit: ${{ github.sha }}
-            • Author: ${{ github.actor }}
-            • Workflow: ${{ github.workflow }}
+             Selenium Tests ${{ needs.test.result == 'success' && ' PASSED' || ' FAILED' }}
             
             🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         env:
