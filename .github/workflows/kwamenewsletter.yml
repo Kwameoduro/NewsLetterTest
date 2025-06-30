@@ -57,13 +57,12 @@ jobs:
           text: |
           
              Selenium Tests ${{ needs.test.result == 'success' && ' PASSED' || ' FAILED' }}
+            
+             Details:
+            • Repository: ${{ github.repository }}
+            • Author: ${{ github.actor }}
+            
             🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-#
-#            Details:
-#            • Repository: ${{ github.repository }}
-#            • Author: ${{ github.actor }}
-#
-#            🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
