@@ -50,7 +50,7 @@ public class BasePage {
         }
     }
 
-    public void waitForVisibility(WebElement element) {
+  /*  public void waitForVisibility(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
-    }
+    }*/
 }
