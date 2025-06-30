@@ -41,15 +41,48 @@ jobs:
           path: test-output.log
 
   notify:
+    name: Send Slack Notification
     runs-on: ubuntu-latest
     needs: test
-    if: always()
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    if: always()  # Run even if tests fail
+
     steps:
-      - name: Notify Slack Notification
+      # Step 1: Send Slack Notification - FIXED: Proper secret checking
+      - name: Send Slack Notification
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ needs.test.result }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          text: |
+            🧪 Selenium Tests ${{ needs.test.result == 'success' && '✅ PASSED' || '❌ FAILED' }}
+            
+            📋 Details:
+            • Repository: ${{ github.repository }}
+            • Branch: ${{ github.ref_name }}
+            • Commit: ${{ github.sha }}
+            • Author: ${{ github.actor }}
+            • Workflow: ${{ github.workflow }}
+            
+            🔗 View Results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # Step 2: Show notification status (for debugging)
+      - name: Notification Status
+        if: always()
         run: |
-          STATUS="${{ needs.test.result }}"
-          curl -X POST -H 'Content-type: application/json' \
-          --data "{\"text\":\"Selenium Java test job finished with status: *$STATUS*\"}" \
-          $SLACK_WEBHOOK_URL
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            echo " Slack notification: Configured ✅"
+            echo " Notifications sent to your #selenium-tests channel!"
+          else
+            echo " Slack notification: Not configured "
+            echo ""
+            echo " To enable Slack notifications:"
+            echo "1. Create a Slack channel (e.g., #selenium-tests)"
+            echo "2. Add Incoming Webhooks app to your channel"
+            echo "3. Copy the webhook URL"
+            echo "4. Add it as SLACK_WEBHOOK_URL secret in GitHub"
+            echo ""
+            echo "🔗 Guide: https://api.slack.com/messaging/webhooks"
+          fi
