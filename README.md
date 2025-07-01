@@ -9,7 +9,6 @@ This project contains an automated test suite for validating the core functional
 - [About the Project](#about-the-project)
 - [Technologies Used](#technologies-used)
 - [Test Coverage](#test-coverage)
-- [Project Structure](#project-structure)
 
 ---
 
@@ -48,26 +47,6 @@ The tests use the **Page Object Model (POM)** for structure and maintainability,
 | 005         | Hover over dismiss button and verify style change |
 
 ---
-
-##  Project Structure
-NewsletterTesting/
-├── pom.xml
-├── .github/
-|    └── workflows/ kwamenewsletter.yml
-|
-├── src/
-│ └── main/
-│ └── java/com/newsletter/
-│ ├── base/BasePage.java
-│ └── pages/
-│ ├── HomePage.java
-│ └── SuccessPage.java
-│
-|
-└── test/
-└── java/com/newsletter/
-└── NewsletterTest.java
-
 
 
 
